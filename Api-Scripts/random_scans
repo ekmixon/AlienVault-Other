@@ -103,15 +103,18 @@ def random_ip(ips):
 
 def generate_nbe_host(ip):
     port, proto, name = random_service()
-    risk = " cvss base score : %s.0" % random.randint(0,10)
-    values = {'domain': 'fakedomain',
-              'ip': ip,
-              'service': name,
-              'port': port,
-              'proto': proto,
-              'oid': random_oid(),
-              'risk': random.choice(nbe_risks),
-              'summary': "Totally Fake Data" + risk}
+    risk = f" cvss base score : {random.randint(0, 10)}.0"
+    values = {
+        'domain': 'fakedomain',
+        'ip': ip,
+        'service': name,
+        'port': port,
+        'proto': proto,
+        'oid': random_oid(),
+        'risk': random.choice(nbe_risks),
+        'summary': f"Totally Fake Data{risk}",
+    }
+
 
     return nbe_result.substitute(values)
 

@@ -54,7 +54,6 @@ def main():
 	)
 	target = module.params.get('target')
 	nm = run_scan(target)
-	output = ''
 	hosts = {}
 	#print vars(nm)
 	#print nm.get_nmap_last_output()
@@ -67,15 +66,10 @@ def main():
 			script_id = dscript.getAttributeNode('id').value
 			script_out = dscript.getAttributeNode('output').value
 			if len(script_out):
-				m = re.search('NetBIOS\sname:\s(?P<nb_name>\S+),', script_out)
-				if m:
+				if m := re.search('NetBIOS\sname:\s(?P<nb_name>\S+),', script_out):
 					#output += "Host: " + host + ' NetBIOS Name: ' + m.group('nb_name').title() + "\n"
-					hosts[host] = m.group('nb_name').title()
-	if len(hosts):
-                output += 'Hosts Found.'
-        else:
-                output += 'No Hosts Found.'
-                
+					hosts[host] = m['nb_name'].title()
+	output = '' + ('Hosts Found.' if len(hosts) else 'No Hosts Found.')
 	module.exit_json(changed=True, msg=output, hosts_found = hosts)
 # this is magic, see lib/ansible/module_common.py
 #<<INCLUDE_ANSIBLE_MODULE_COMMON>>
